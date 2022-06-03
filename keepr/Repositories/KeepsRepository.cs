@@ -53,6 +53,25 @@ namespace keepr.Repositories
             }, new { id }).FirstOrDefault();
         }
 
+        internal List<Keep> GetByUserId(string id)
+        {
+            string sql = @"
+            SELECT
+                k.*,
+                COUNT(k.id = v.keepId) AS kept,
+                a.*
+            FROM keeps k
+            LEFT JOIN vaultkeeps v ON k.id = v.keepId
+            JOIN accounts a ON k.creatorId = a.id
+            WHERE a.id = @id
+            GROUP BY k.id;
+            ";
+            return _db.Query<Keep, Profile, Keep>(sql, (keep, account) => {
+                keep.Creator = account;
+                return keep;
+            }, new { id }).ToList();
+        }
+
         internal Keep IncreaseViewsByOne(Keep viewed)
         {
             string sql = @"

@@ -29,6 +29,11 @@ namespace keepr.Services
             return _repo.IncreaseViewsByOne(found);
         }
 
+        internal List<Keep> GetByUserId(string id)
+        {
+            return _repo.GetByUserId(id);
+        }
+
         private Keep GetByIdNoView(int id)
         {
             Keep found = _repo.GetById(id);
