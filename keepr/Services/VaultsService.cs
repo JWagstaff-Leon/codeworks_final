@@ -1,5 +1,6 @@
 using keepr.Repositories;
 using keepr.Models;
+using System;
 
 namespace keepr.Services
 {
@@ -14,22 +15,38 @@ namespace keepr.Services
 
         internal Vault GetById(int id, string userId)
         {
-
+            Vault found = _repo.GetById(id);
+            if(found == null)
+            {
+                throw new Exception("Could not find vault with that id.");
+            }
+            if(userId != found.CreatorId && found.IsPrivate == true)
+            {
+                throw new Exception("You do not have access to this vault.");
+            }
+            return found;
         }
 
         internal Vault Create(Vault data)
         {
-
+            return _repo.Create(data);
         }
 
         internal Vault Edit(Vault update)
         {
-
+            Vault edited = GetById(update.Id, update.CreatorId);
+            
+            edited.Name = update.Name ?? edited.Name;
+            edited.Description = update.Description ?? edited.Description;
+            edited.IsPrivate = update.IsPrivate ?? edited.IsPrivate;
+            return _repo.Edit(edited);
         }
 
         internal Vault Remove(int id, string userId)
         {
-            
+            Vault removed = GetById(id, userId);
+            _repo.Remove(id);
+            return removed;
         }
     }
 }
