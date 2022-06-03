@@ -23,13 +23,12 @@ namespace keepr.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<Vault>> GetById(int id)
         {
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                Vault found = _serv.GetById(id, userInfo.Id);
+                Vault found = _serv.GetById(id, userInfo?.Id);
                 return Ok(found);
             }
             catch(Exception e)
@@ -39,13 +38,12 @@ namespace keepr.Controllers
         }
         
         [HttpGet("{id}/keeps")]
-        [Authorize]
         public async Task<ActionResult<List<KeepVaultKeepVM>>> GetVaultKeeps(int id)
         {
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                _serv.GetById(id, userInfo.Id); //verify vault exists is acessable by the user
+                _serv.GetById(id, userInfo?.Id); //verify vault exists is acessable by the user
                 List<KeepVaultKeepVM> found = _vkServ.GetByVaultId(id);
                 return Ok(found);
             }

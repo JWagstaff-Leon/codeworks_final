@@ -28,7 +28,10 @@ namespace keepr.Controllers
             try
             {
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
-                _vServ.GetById(data.VaultId, userInfo.Id); //verify vault is acessable by the user
+                if(!_vServ.OwnsVault(data.VaultId, userInfo.Id))
+                {
+                    throw new Exception("You cannot add to this vault.");
+                }
                 data.CreatorId = userInfo.Id;
                 VaultKeep created = _serv.Create(data);
                 return Ok(created);
