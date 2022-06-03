@@ -16,7 +16,7 @@ namespace keepr.Models
         public DateTime UpdatedAt { get; set; }
     }
 
-    public class VaultKeepVMKeep : Keep
+    public class KeepVaultKeepVM : Keep
     {
         public int VaultKeepId { get; set; }
     }
