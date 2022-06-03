@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using keepr.Services;
@@ -15,7 +16,7 @@ namespace keepr.Controllers
         private readonly VaultsService _serv;
         private readonly VaultKeepsService _vkServ;
 
-        public VaultsController(VaultsService serv, KeepsService vkServ)
+        public VaultsController(VaultsService serv, VaultKeepsService vkServ)
         {
             _serv = serv;
             _vkServ = vkServ;
@@ -39,16 +40,17 @@ namespace keepr.Controllers
         
         [HttpGet("{id}/keeps")]
         [Authorize]
-        public Task<ActionResult<KeepVaultKeepVM>> GetVaultKeeps(int id)
+        public async Task<ActionResult<List<KeepVaultKeepVM>>> GetVaultKeeps(int id)
         {
             try
             {
-                //TODO add to the vaultkeeps service to do this
-                return Task.FromResult(Ok());
+                await GetById(id); //verify vault exists and is acessable by the user
+                List<KeepVaultKeepVM> found = _vkServ.GetByVaultId(id);
+                return Ok(found);
             }
             catch(Exception e)
             {
-                return Task.FromResult(BadRequest(e.Message));
+                return BadRequest(e.Message);
             }
         }
 
