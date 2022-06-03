@@ -44,7 +44,8 @@ namespace keepr.Controllers
         {
             try
             {
-                await GetById(id); //verify vault exists and is acessable by the user
+                Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
+                _serv.GetById(id, userInfo.Id); //verify vault exists is acessable by the user
                 List<KeepVaultKeepVM> found = _vkServ.GetByVaultId(id);
                 return Ok(found);
             }
