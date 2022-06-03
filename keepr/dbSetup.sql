@@ -45,12 +45,14 @@ CREATE TABLE IF NOT EXISTS vaultkeeps(
 ) DEFAULT CHARSET UTF8;
 
 SELECT
-k.*,
+                k.*,
                 COUNT(k.id = keepId) AS kept,
                 a.*
             FROM keeps k
             LEFT JOIN vaultkeeps v ON k.id = v.keepId
             JOIN accounts a ON k.creatorId = a.id
+            WHERE k.id = 11
             GROUP BY k.id;
+
 
             INSERT INTO vaultkeeps (creatorId, vaultId, keepId) VALUES ("62755286701a57ffa8c287de", 2, 1);

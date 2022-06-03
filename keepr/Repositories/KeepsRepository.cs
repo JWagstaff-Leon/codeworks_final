@@ -21,7 +21,7 @@ namespace keepr.Repositories
             string sql = @"
             SELECT
                 k.*,
-                COUNT(k.id = keepId) AS kept,
+                COUNT(k.id = v.keepId) AS kept,
                 a.*
             FROM keeps k
             LEFT JOIN vaultkeeps v ON k.id = v.keepId
@@ -42,9 +42,10 @@ namespace keepr.Repositories
                 COUNT(k.id = v.keepId) AS kept,
                 a.*
             FROM keeps k
-            LEFTJOIN vaultkeeps v ON k.id = v.keepId
+            LEFT JOIN vaultkeeps v ON k.id = v.keepId
             JOIN accounts a ON k.creatorId = a.id
-            WHERE id = @id;
+            WHERE k.id = @id
+            GROUP BY k.id;
             ";
             return _db.Query<Keep, Profile, Keep>(sql, (keep, account) => {
                 keep.Creator = account;
