@@ -64,6 +64,7 @@ namespace keepr.Controllers
                 Account userInfo = await HttpContext.GetUserInfoAsync<Account>();
                 data.CreatorId = userInfo.Id;
                 Vault created = _serv.Create(data);
+                created.Creator = userInfo;
                 return Ok(created);
             }
             catch(Exception e)
