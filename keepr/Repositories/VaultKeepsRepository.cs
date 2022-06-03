@@ -32,12 +32,19 @@ namespace keepr.Repositories
             string sql = @"
             SELECT
                 k.*,
-                vk.id AS vaultKeepId
+                COUNT(k.id = vk.keepId) AS kept,
+                vk.id AS vaultKeepId,
+                a.*
             FROM vaultkeeps vk
+            JOIN keeps k on vk.keepId = k.id
+            JOIN accounts a ON k.creatorId = a.id
             WHERE vk.vaultId = @id
-            JOIN keeps k on vk.keepId = k.id;
+            GROUP BY vk.id;
             ";
-            return _db.Query<KeepVaultKeepVM>(sql, new { id }).ToList();
+            return _db.Query<KeepVaultKeepVM, Profile, KeepVaultKeepVM>(sql, (vm, account) => {
+                vm.Creator = account;
+                return vm;
+            },new { id }).ToList();
         }
 
         internal List<VaultKeep> GetByKeepAndUserIds(int keepId, string userId)
