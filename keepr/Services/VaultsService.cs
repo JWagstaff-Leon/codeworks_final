@@ -1,6 +1,7 @@
 using keepr.Repositories;
 using keepr.Models;
 using System;
+using System.Collections.Generic;
 
 namespace keepr.Services
 {
@@ -25,6 +26,11 @@ namespace keepr.Services
                 throw new Exception("You do not have access to this vault.");
             }
             return found;
+        }
+
+        internal List<Vault> GetByUserId(string userId, string authId)
+        {
+            return _repo.GetByUserId(userId, authId);
         }
 
         internal Vault Create(Vault data)

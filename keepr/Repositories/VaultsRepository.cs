@@ -48,6 +48,22 @@ namespace keepr.Repositories
             }, new { userId }).ToList();
         }
 
+        internal List<Vault> GetByUserId(string userId, string authId)
+        {
+            string sql = @"
+            SELECT
+                v.*,
+                a.*
+            FROM vaults v
+            JOIN accounts a ON v.creatorId = a.id
+            WHERE v.creatorId = @userId AND v.creatorId = @authId OR v.creatorId = @userId AND NOT v.isPrivate;
+            ";//get rows where the person you're looking up is you OR where it's the person you're looking for and they're public
+            return _db.Query<Vault, Profile, Vault>(sql, (vault, account) => {
+                vault.Creator = account;
+                return vault;
+            }, new { userId, authId }).ToList();
+        }
+
         internal Vault GetById(int id)
         {
             string sql = @"
