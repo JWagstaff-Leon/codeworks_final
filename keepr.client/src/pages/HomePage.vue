@@ -25,6 +25,10 @@ export default {
             {
                 Modal.getOrCreateInstance(document.getElementById("keep-modal")).show();
             }
+            else
+            {
+                Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide();
+            }
         }
     },
 

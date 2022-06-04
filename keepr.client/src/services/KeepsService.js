@@ -17,6 +17,13 @@ class KeepsService
         logger.log("[KeepsService > getById > response]", res.data);
         AppState.activeKeep = res.data;
     }
+
+    async remmove(id)
+    {
+        const res = await api.delete("api/keeps/" + id);
+        logger.log("[KeepsService > remove > response]");
+        AppState.keeps = AppState.keeps.filter(keep => keep.id != res.data.id);
+    }
 }
 
 export const keepsService = new KeepsService();

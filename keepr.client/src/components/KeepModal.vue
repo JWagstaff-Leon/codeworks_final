@@ -18,11 +18,12 @@
                         </div>
                         <h1 class="mt-4 text-dark">{{activeKeep?.name}}</h1>
                         <p class="text-secondary mt-4 fs-5 text-start align-self-start mx-5 flex-grow-1">{{activeKeep.description}}</p>
-                        <div class="d-flex justify-content-evenly">
-                            <button class="btn btn-outline-primary">Add To Vault <i class="mdi mdi-menu-down"></i></button>
-                            <i v-if="isUsersKeep" class="mdi mdi-delete-outline text-secondary delete-keep-button"></i>
-                            <div>
-                                
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <button class="btn btn-outline-primary fw-bold">ADD TO VAULT <i class="mdi mdi-menu-down"></i></button>
+                            <i v-if="isUsersKeep" class="mdi mdi-delete-outline text-secondary delete-keep-button action fs-1" @click="deleteKeep"></i>
+                            <div class="d-flex align-items-end">
+                                <img :src="activeKeep?.creator.picture" class="profile-image rounded-2" />
+                                <h5 class="text-black ms-3">{{activeKeep?.creator.name}}</h5>
                             </div>
                         </div>
                     </div>
@@ -35,17 +36,37 @@
 <script>
 import { computed } from '@vue/reactivity'
 import { AppState } from '../AppState.js'
+import Pop from '../utils/Pop.js'
+import { keepsService } from '../services/KeepsService.js'
 export default
 {
     setup()
     {
-        return {
-            activeKeep: computed(() => AppState.activeKeep),
-            isUsersKeep: computed(() => AppState.account.id === AppState.activeKeep?.creator.id),
-            clearActive()
-            {
+        const activeKeep = computed(() => AppState.activeKeep);
+        const clearActive = () => {
                 AppState.openModal = false;
                 setTimeout(() => {AppState.activeKeep = null;}, 150);                
+            };
+        return {
+            activeKeep,
+            isUsersKeep: computed(() => AppState.account.id === AppState.activeKeep?.creator.id),
+            clearActive,
+            async deleteKeep()
+            {
+                try
+                {
+                    if(await Pop.confirm())
+                    {
+                        keepsService.remmove(activeKeep.value?.id);
+                        Pop.toast("Keep successfully deleted", "success");
+                        clearActive();
+                    }
+                }
+                catch(error)
+                {
+                    logger.error("[error prefix]", error.message);
+                    Pop.toast(error.message, "error");
+                }
             }
         }
     }
@@ -53,11 +74,29 @@ export default
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/scss/variables.scss";
+
 .spinner-border
 {
     height: 15vh;
     width: 15vh;
     margin-top: 5vh;
     margin-bottom: 5vh;
+}
+
+.profile-image
+{
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.delete-keep-button
+{
+    transition: color 0.5s ease;
+}
+
+.delete-keep-button:hover
+{
+    color: $danger !important;
 }
 </style>
