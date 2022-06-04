@@ -1,10 +1,16 @@
 <template>
-    <div class="my-4 rounded-3">
-        <img :src="keep.img" class="rounded-3 elevation-4">
+    <div class="my-3 rounded-3 position-relative action" @click="makeActive" :title="`Open details for ${keep.name}`">
+        <img :src="keep.img" class="rounded-3 elevation-4 card-image" />
+        <div class="position-absolute card-text d-flex justify-content-between align-items-end w-100 px-2">
+            <h3 class="text-light m-0 fw-bold">{{keep.name}}</h3>
+            <img :src="keep.creator.picture" class="profile-image rounded-circle action" @click="openProfile" :title="`Open ${keep.creator.name}'s profile`" />
+        </div>
     </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
+import { AppState } from '../AppState.js';
 export default
 {
     props:
@@ -16,20 +22,41 @@ export default
         }
     },
 
-    setup()
+    setup(props)
     {
+        const router = useRouter();
         return {
-            
+            makeActive()
+            {
+                AppState.activeKeep = props.keep;
+            },
+
+            openProfile()
+            {
+                router.push({name: "Profile", params: {id: props.keep.creator.id}});
+            }
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-img
+.card-image
 {
     object-fit: cover;
     max-height: 30rem;
     width: 100%;
+}
+
+.card-text
+{
+    bottom: 0.75rem;
+}
+
+.profile-image
+{
+    height: 2rem;
+    width: 2rem;
+    object-fit: cover;
 }
 </style>
