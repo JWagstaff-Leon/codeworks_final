@@ -1,7 +1,7 @@
 <template>
   <span class="navbar-text">
     <button
-      class="btn selectable text-success lighten-30 text-uppercase my-2 my-lg-0"
+      class="btn selectable text-seconary darken-20 fs-5 text-uppercase my-2 my-lg-0"
       @click="login"
       v-if="!user.isAuthenticated"
     >
@@ -22,7 +22,7 @@
             height="40"
             class="rounded"
           />
-          <span class="mx-3 text-success lighten-30">{{ account.name }}</span>
+          <span class="mx-3 text-seconary darken-20 fs-5">{{ account.name }}</span>
         </div>
       </div>
       <div
