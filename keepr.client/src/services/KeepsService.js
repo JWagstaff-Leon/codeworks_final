@@ -10,6 +10,13 @@ class KeepsService
         logger.log("[KeepsService > getAll > response]", res.data);
         AppState.keeps = res.data;
     }
+    
+    async getById(id)
+    {
+        const res = await api.get("api/keeps/" + id);
+        logger.log("[KeepsService > getById > response]", res.data);
+        AppState.activeKeep = res.data;
+    }
 }
 
 export const keepsService = new KeepsService();

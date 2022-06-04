@@ -12,15 +12,7 @@
   ],
   "settings": {
     "editor.suggestSelection": "first",
-    "git.enableSmartCommit": true,
     "git.confirmSync": false,
-    "git.autofetch": true,
-    "javascript.referencesCodeLens.enabled": true,
-    "javascript.referencesCodeLens.showOnAllFunctions": true,
-    "typescript.implementationsCodeLens.enabled": true,
-    "typescript.referencesCodeLens.enabled": true,
-    "typescript.referencesCodeLens.showOnAllFunctions": true,
-    "js/ts.implicitProjectConfig.checkJs": true,
     "files.exclude": {
       "**/.nyc_*": true,
       "**/coverage": true,

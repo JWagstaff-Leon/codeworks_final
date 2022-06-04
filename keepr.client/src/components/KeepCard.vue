@@ -2,7 +2,7 @@
     <div class="my-3 rounded-3 position-relative action" @click="makeActive" :title="`Open details for ${keep.name}`">
         <img :src="keep.img" class="rounded-3 elevation-4 card-image" />
         <div class="position-absolute card-text d-flex justify-content-between align-items-end w-100 px-2">
-            <h3 class="text-light m-0 fw-bold">{{keep.name}}</h3>
+            <h4 class="text-light m-0 fw-bold no-select">{{keep.name}}</h4>
             <img :src="keep.creator.picture" class="profile-image rounded-circle action" @click="openProfile" :title="`Open ${keep.creator.name}'s profile`" />
         </div>
     </div>
@@ -11,6 +11,7 @@
 <script>
 import { useRouter } from 'vue-router'
 import { AppState } from '../AppState.js';
+import { keepsService } from '../services/KeepsService.js';
 export default
 {
     props:
@@ -28,7 +29,8 @@ export default
         return {
             makeActive()
             {
-                AppState.activeKeep = props.keep;
+                AppState.openModal = true;
+                keepsService.getById(props.keep.id);
             },
 
             openProfile()

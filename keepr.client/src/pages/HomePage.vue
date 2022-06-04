@@ -3,7 +3,8 @@
         <div class="masonry-with-columns">
             <KeepCard v-for="k in keeps" :key="k.id" :keep="k" />
         </div>
-  </div>
+    </div>
+    <KeepModal id="keep-modal" />
 </template>
 
 <script>
@@ -12,28 +13,41 @@ import Pop from '../utils/Pop.js';
 import { keepsService } from "../services/KeepsService.js";
 import { computed } from '@vue/reactivity';
 import { AppState } from '../AppState.js';
+import { Modal } from 'bootstrap';
 export default {
   name: 'Home',
 
-  mounted()
-  {
-      try
-      {
-          keepsService.getAll();
-      }
-      catch(error)
-      {
-          logger.error("[HomePage.vue > mounted]", error.message);
-          Pop.toast(error.message, "error");
-      }
-  },
+    watch:
+    {
+        openModal(openModal)
+        {
+            if(openModal)
+            {
+                Modal.getOrCreateInstance(document.getElementById("keep-modal")).show();
+            }
+        }
+    },
 
-  setup()
-  {
-      return {
-          keeps: computed(() => AppState.keeps)
-      }
-  }
+    mounted()
+    {
+        try
+        {
+            keepsService.getAll();
+        }
+        catch(error)
+        {
+            logger.error("[HomePage.vue > mounted]", error.message);
+            Pop.toast(error.message, "error");
+        }
+    },
+
+    setup()
+    {
+        return {
+            keeps: computed(() => AppState.keeps),
+            openModal: computed(() => AppState.openModal)
+        }
+    }
 }
 </script>
 
