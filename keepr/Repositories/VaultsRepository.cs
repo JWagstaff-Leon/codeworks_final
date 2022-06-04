@@ -106,9 +106,9 @@ namespace keepr.Repositories
                 isPrivate = @IsPrivate
             WHERE id = @Id
             LIMIT 1;
+            SELECT CURRENT_TIMESTAMP;
             ";
-            _db.Execute(sql, update);
-            update.UpdatedAt = DateTime.UtcNow;
+            update.UpdatedAt = _db.ExecuteScalar<DateTime>(sql, update);
             return update;
         }
 
