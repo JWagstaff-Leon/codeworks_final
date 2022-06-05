@@ -18,6 +18,13 @@ class KeepsService
         AppState.activeKeep = res.data;
     }
 
+    async getByProfile(id)
+    {
+        const res = await api.get("api/profiles/" + id + "/keeps");
+        logger.log("[KeepsService > getByProfile > response]", res.data);
+        AppState.activeKeeps = res.data;
+    }
+
     async remmove(id)
     {
         const res = await api.delete("api/keeps/" + id);
