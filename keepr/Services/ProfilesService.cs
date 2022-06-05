@@ -5,16 +5,16 @@ namespace keepr.Services
 {
     public class ProfilesService
     {
-        private readonly AccountsRepository _repo;
+        private readonly ProfilesRepository _repo;
 
-        public ProfilesService(AccountsRepository repo)
+        public ProfilesService(ProfilesRepository repo)
         {
             _repo = repo;
         }
 
         internal Profile GetById(string id)
         {
-            return _repo.GetById(id);
+            return (Profile)_repo.GetById(id);
         }
     }
 }
