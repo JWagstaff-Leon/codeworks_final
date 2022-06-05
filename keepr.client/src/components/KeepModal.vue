@@ -2,12 +2,12 @@
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div v-if="!activeKeep" class="w-100 d-flex flex-column">
+                <div v-if="!activeKeep && !activeVaultkeeps" class="w-100 d-flex flex-column">
                     <button type="button" class="btn-close align-self-end mt-2 me-2" data-bs-dismiss="modal" aria-label="Close" @click="clearActive"></button>
                     <div class="spinner-border text-secondary align-self-center"></div>
                 </div>
                 <div v-else class="modal-body d-flex">
-                    <div class="w-50">
+                    <div class="w-50 d-flex align-items-center justify-content-center">
                         <img :src="activeKeep?.img" class="img-fluid" />
                     </div>
                     <div class="w-50 d-flex flex-column align-items-center px-5">
@@ -18,8 +18,13 @@
                         </div>
                         <h1 class="mt-4 text-dark">{{activeKeep?.name}}</h1>
                         <p class="text-secondary mt-4 fs-5 text-start align-self-start mx-5 flex-grow-1">{{activeKeep.description}}</p>
-                        <div class="d-flex justify-content-between align-items-center w-100">
-                            <button class="btn btn-outline-primary fw-bold">ADD TO VAULT <i class="mdi mdi-menu-down"></i></button>
+                        <div class="d-flex align-items-center w-100" :class="{'justify-content-between': userAuthenticated, 'justify-content-end': !userAuthenticated}">
+                            <div v-if="userAuthenticated" class="dropdown">
+                                <button class="btn btn-outline-primary fw-bold dropdown-toggle" data-bs-toggle="dropdown">ADD TO VAULT</button>
+                                <ul class="dropdown-menu">
+                                    <li v-for="v in userVaults" :key="v.id" class="no-select" :class="{'selectable text-black': !activeVaultkeeps.find(vk => vk.vaultId == v.id), 'no-add text-secondary': activeVaultkeeps.find(vk => vk.vaultId == v.id)}" :title="activeVaultkeeps.find(vk => vk.vaultId == v.id) ? 'Keep is already in this vault' : ''" @click="addToVault(v.id, !activeVaultkeeps.find(vk => vk.vaultId == v.id))">{{v.name}}</li>
+                                </ul>
+                            </div>
                             <i v-if="isUsersKeep" class="mdi mdi-delete-outline text-secondary delete-keep-button action fs-1" @click="deleteKeep"></i>
                             <div class="d-flex align-items-end">
                                 <img :src="activeKeep?.creator.picture" class="profile-image rounded-2" />
@@ -37,7 +42,8 @@
 import { computed } from '@vue/reactivity'
 import { AppState } from '../AppState.js'
 import Pop from '../utils/Pop.js'
-import { keepsService } from '../services/KeepsService.js'
+import { keepsService } from '../services/KeepsService.js';
+import { vaultkeepsService } from "../services/VaultkeepsService.js";
 export default
 {
     setup()
@@ -45,11 +51,14 @@ export default
         const activeKeep = computed(() => AppState.activeKeep);
         const clearActive = () => {
                 AppState.openModal = false;
-                setTimeout(() => {AppState.activeKeep = null;}, 150);                
+                setTimeout(() => { AppState.activeKeep = null; AppState.activeVaultkeeps = null; }, 150);                
             };
         return {
             activeKeep,
+            activeVaultkeeps: computed(() => AppState.activeVaultkeeps),
+            userAuthenticated: computed(() => AppState.user.isAuthenticated),
             isUsersKeep: computed(() => AppState.account.id === AppState.activeKeep?.creator.id),
+            userVaults: computed(() => AppState.userVaults),
             clearActive,
             async deleteKeep()
             {
@@ -57,7 +66,7 @@ export default
                 {
                     if(await Pop.confirm())
                     {
-                        keepsService.remmove(activeKeep.value?.id);
+                        await keepsService.remmove(activeKeep.value?.id);
                         Pop.toast("Keep successfully deleted", "success");
                         clearActive();
                     }
@@ -66,6 +75,14 @@ export default
                 {
                     logger.error("[error prefix]", error.message);
                     Pop.toast(error.message, "error");
+                }
+            },
+            async addToVault(vaultId, isValid)
+            {
+                if(isValid)
+                {
+                    await vaultkeepsService.create(vaultId, activeKeep.value?.id);
+                    Pop.toast("Successfully added to vault", "success");
                 }
             }
         }
@@ -98,5 +115,16 @@ export default
 .delete-keep-button:hover
 {
     color: $danger !important;
+}
+
+.no-add
+{
+    background-color: lightgrey;
+    cursor: not-allowed;
+}
+
+.img-fluid
+{
+    max-height: 85vh;
 }
 </style>
