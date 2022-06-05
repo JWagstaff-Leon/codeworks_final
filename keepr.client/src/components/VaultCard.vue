@@ -1,8 +1,8 @@
 <template>
-    <div class="my-3 rounded-3 position-relative action vault-card" @click="openVault" :title="`Go to vault ${vault.name} page`">
+    <div class="my-2 mx-3 rounded-3 position-relative action vault-card" @click="openVault" :title="`Go to vault ${vault.name}`">
         <img :src="vault.img" class="rounded-3 elevation-4 card-image" />
         <div class="position-absolute card-text w-100 px-2">
-            <h4 class="text-dark m-0 fw-bold no-select">{{vault.name}}</h4>
+            <h4 class="text-light m-0 fw-bold no-select">{{vault.name}}</h4>
         </div>
     </div>
 </template>
@@ -43,7 +43,7 @@ export default
 .card-image
 {
     object-fit: cover;
-    
+    height: 100%;
     width: 100%;
 }
 

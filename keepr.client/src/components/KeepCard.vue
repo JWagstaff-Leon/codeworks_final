@@ -3,7 +3,7 @@
         <img :src="keep.img" class="rounded-3 elevation-4 card-image" />
         <div class="position-absolute card-text d-flex justify-content-between align-items-end w-100 px-2">
             <h4 class="text-light m-0 fw-bold no-select">{{keep.name}}</h4>
-            <img :src="keep.creator.picture" class="profile-image rounded-circle action" @click.stop="openProfile" :title="`Open ${keep.creator.name}'s profile`" />
+            <img v-if="!isProfile" :src="keep.creator.picture" class="profile-image rounded-circle action" @click.stop="openProfile" :title="`Open ${keep.creator.name}'s profile`" />
         </div>
     </div>
 </template>
@@ -21,6 +21,12 @@ export default
         {
             type: Object,
             required: true
+        },
+
+        isProfile:
+        {
+            type: Boolean,
+            default: false
         }
     },
 
