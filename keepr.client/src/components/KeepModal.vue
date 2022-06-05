@@ -1,6 +1,6 @@
 <template>
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-        <div class="modal-dialog modal-xl">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div v-if="!activeKeep && !activeVaultkeeps" class="w-100 d-flex flex-column">
                     <button type="button" class="btn-close align-self-end mt-2 me-2" data-bs-dismiss="modal" aria-label="Close" @click="clearActive"></button>
@@ -10,15 +10,15 @@
                     <div class="w-50 d-flex align-items-center justify-content-center">
                         <img :src="activeKeep?.img" class="img-fluid" />
                     </div>
-                    <div class="w-50 d-flex flex-column align-items-center px-5">
+                    <div class="w-50 d-flex flex-column align-items-center">
                         <button type="button" class="btn-close align-self-end" data-bs-dismiss="modal" aria-label="Close" @click="clearActive"></button>
-                        <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center px-5">
                             <span class="mx-2 text-secondary fs-5 no-select" :title="`Viewed ${activeKeep.views} time${activeKeep.views == 1 ? '' : 's'}`"><i class="mdi mdi-eye text-primary me-1"></i>{{activeKeep?.views}}</span>
                             <span class="mx-2 text-secondary fs-5 no-select" :title="`Kept in ${activeKeep.kept} vault${activeKeep.kept == 1 ? '' : 's'}`"><img src="../assets/img/Kept.svg" class="me-1" />{{activeKeep?.kept}}</span>
                         </div>
-                        <h1 class="mt-4 text-dark">{{activeKeep?.name}}</h1>
-                        <p class="text-secondary mt-4 fs-5 text-start align-self-start mx-5 flex-grow-1">{{activeKeep.description}}</p>
-                        <div class="d-flex align-items-center w-100" :class="{'justify-content-between': userAuthenticated, 'justify-content-end': !userAuthenticated}">
+                        <h1 class="mt-4 text-dark px-5">{{activeKeep?.name}}</h1>
+                        <p class="text-secondary mt-4 fs-5 text-start align-self-start mx-5 flex-grow-1 px-5">{{activeKeep.description}}</p>
+                        <div class="d-flex align-items-center w-100 px-5" :class="{'justify-content-between': userAuthenticated, 'justify-content-end': !userAuthenticated}">
                             <div v-if="userAuthenticated" class="dropdown">
                                 <button class="btn btn-outline-primary fw-bold dropdown-toggle" data-bs-toggle="dropdown">ADD TO VAULT</button>
                                 <ul class="dropdown-menu">

@@ -12,16 +12,26 @@
                     <h3>Keeps: {{keeps?.length}}</h3>
                 </div>
             </div>
-            <h1 class="mt-5 text-black">Vaults <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new vault" @click="newVaultModal"></i></h1>
+            <h1 class="mt-5 text-black">Vaults <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new vault" @click="newItemModal(true)"></i></h1>
             <div class="d-flex flex-wrap">
                 <VaultCard v-for="v in vaults" :key="v.id" :vault="v" />
             </div>
-            <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newKeepModal"></i></h1>
+            <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
             <div class="masonry-with-columns">
                 <KeepCard v-for="k in keeps" :key="k.id" :keep="k" :isProfile="true" />
             </div>
         </div>
         <KeepModal id="keep-modal" />
+        <NewItemModal id="new-item-modal">
+            <template #header>
+                <h1 v-if="newItemIsVault" class="text-black">New Vault</h1>
+                <h1 v-else class="text-black">New Keep</h1>
+            </template>
+            <template #body>
+                <NewVaultForm v-if="newItemIsVault" />
+                <NewKeepForm v-else />
+            </template>
+        </NewItemModal>        
     </div>
 </template>
 
@@ -83,14 +93,21 @@ export default
     {
         const route = useRoute();
         const loading = ref(true);
+        const newItemIsVault = ref(false);
         return {
             route,
             loading,
+            newItemIsVault,
             isCurrentUser: computed(() => AppState.account?.id === route.params.id),
             profile: computed(() => AppState.activeProfile),
             vaults: computed(() => AppState.activeVaults),
             keeps: computed(() => AppState.activeKeeps),
-            openModal: computed(() => AppState.openModal)
+            openModal: computed(() => AppState.openModal),
+            newItemModal(isVault)
+            {
+                newItemIsVault.value = isVault;
+                Modal.getOrCreateInstance(document.getElementById("new-item-modal")).show();
+            }
         }
     }
 }
