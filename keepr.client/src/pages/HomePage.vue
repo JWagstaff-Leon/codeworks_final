@@ -32,11 +32,11 @@ export default {
         }
     },
 
-    mounted()
+    async mounted()
     {
         try
         {
-            keepsService.getAll();
+            await keepsService.getAll();
         }
         catch(error)
         {
@@ -57,13 +57,12 @@ export default {
 
 <style scoped lang="scss">
 .masonry-with-columns {
-  columns: 5 200px;
+  columns: 4 200px;
   column-gap: 1.75rem;
   div {
     width: 150px;
     display: inline-block;
     width: 100%;
-  } 
-  
+  }
 }
 </style>
