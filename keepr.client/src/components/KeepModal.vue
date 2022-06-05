@@ -26,9 +26,9 @@
                                 </ul>
                             </div>
                             <i v-if="isUsersKeep" class="mdi mdi-delete-outline text-secondary delete-keep-button action fs-1" @click="deleteKeep"></i>
-                            <div class="d-flex align-items-end">
+                            <div class="d-flex align-items-end selectable p-1" @click="openProfile" :title="`Open ${activeKeep?.creator.name}'s profile`">
                                 <img :src="activeKeep?.creator.picture" class="profile-image rounded-2" />
-                                <h5 class="text-black ms-3">{{activeKeep?.creator.name}}</h5>
+                                <h5 class="text-black ms-3 no-select">{{activeKeep?.creator.name}}</h5>
                             </div>
                         </div>
                     </div>
@@ -44,6 +44,7 @@ import { AppState } from '../AppState.js'
 import Pop from '../utils/Pop.js'
 import { keepsService } from '../services/KeepsService.js';
 import { vaultkeepsService } from "../services/VaultkeepsService.js";
+import { useRouter } from 'vue-router';
 export default
 {
     setup()
@@ -53,6 +54,7 @@ export default
                 AppState.openModal = false;
                 setTimeout(() => { AppState.activeKeep = null; AppState.activeVaultkeeps = null; }, 150);                
             };
+        const router = useRouter();
         return {
             activeKeep,
             activeVaultkeeps: computed(() => AppState.activeVaultkeeps),
@@ -84,6 +86,11 @@ export default
                     await vaultkeepsService.create(vaultId, activeKeep.value?.id);
                     Pop.toast("Successfully added to vault", "success");
                 }
+            },
+            openProfile()
+            {
+                clearActive();
+                setTimeout(() => { router.push({name: "Profile", params: {id: activeKeep.value?.creator.id}}); }, 150);
             }
         }
     }
