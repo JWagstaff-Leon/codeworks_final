@@ -66,6 +66,10 @@ namespace keepr.Services
         internal Vault Remove(int id, string userId)
         {
             Vault removed = GetById(id, userId);
+            if(removed.CreatorId != userId)
+            {
+                throw new Exception("You do not have permission to delete this vault.");
+            }
             _repo.Remove(id);
             return removed;
         }
