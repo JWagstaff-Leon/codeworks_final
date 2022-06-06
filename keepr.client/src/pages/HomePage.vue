@@ -1,4 +1,7 @@
 <template>
+    <div v-if="!keeps" class="w-100 h-100 flex-grow-1 align-items-center justify-content-center d-flex">
+        <div class="spinner-border text-secondary"></div>
+    </div>
     <div class="mx-5">
         <div class="masonry-with-columns">
             <KeepCard v-for="k in keeps" :key="k.id" :keep="k" />
@@ -16,6 +19,11 @@ import { AppState } from '../AppState.js';
 import { Modal } from 'bootstrap';
 export default {
   name: 'Home',
+
+    beforeUnmount()
+    {
+        AppState.activeKeeps = null;
+    },
 
     watch:
     {
@@ -36,6 +44,7 @@ export default {
     {
         try
         {
+            AppState.activeKeeps = null;
             await keepsService.getAll();
         }
         catch(error)
@@ -48,7 +57,7 @@ export default {
     setup()
     {
         return {
-            keeps: computed(() => AppState.keeps),
+            keeps: computed(() => AppState.activeKeeps),
             openModal: computed(() => AppState.openModal)
         }
     }
@@ -64,5 +73,11 @@ export default {
     display: inline-block;
     width: 100%;
   }
+}
+
+.spinner-border
+{
+    height: 15vh;
+    width: 15vh;
 }
 </style>

@@ -9,7 +9,7 @@ class KeepsService
     {
         const res = await api.get("api/keeps");
         logger.log("[KeepsService > getAll > response]", res.data);
-        AppState.keeps = res.data;
+        AppState.activeKeeps = res.data;
     }
     
     async getById(id)

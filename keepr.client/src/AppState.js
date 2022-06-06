@@ -6,14 +6,13 @@ export const AppState = reactive({
   account: {},
   userVaults: null,
 
-  keeps: null,
+  activeKeeps: null,
   activeKeep: null,
   activeVaultkeeps: null,
   openModal: false,
 
   activeProfile: null,
   activeVaults: null,
-  activeKeeps: null,
 
   activeVault: null
 })
