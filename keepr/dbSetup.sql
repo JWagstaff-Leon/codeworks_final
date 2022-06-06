@@ -46,7 +46,6 @@ CREATE TABLE IF NOT EXISTS vaultkeeps(
 ) DEFAULT CHARSET UTF8;
 
 
-
 SELECT
     k.*,
     COUNT(k.id = vk.keepId) AS kept,
@@ -57,3 +56,18 @@ JOIN keeps k on vk.keepId = k.id
 JOIN accounts a ON k.creatorId = a.id
 WHERE vk.vaultId = 2
 GROUP BY vk.id;
+
+SELECT
+    k.*,
+    vk.id AS vaultKeepId,
+    a.*
+FROM vaultkeeps vk
+JOIN keeps k ON vk.keepId = k.id
+JOIN accounts a ON k.creatorId = a.id
+WHERE vk.vaultId = @id;
+
+SELECT
+    COUNT(k.id = vk.id)
+from vaultkeeps vk
+JOIN keeps k ON vk.keepId = k.id
+WHERE vk.keepId = @id;

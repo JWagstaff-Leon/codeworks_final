@@ -32,19 +32,32 @@ namespace keepr.Repositories
             string sql = @"
             SELECT
                 k.*,
-                COUNT(k.id = vk.keepId) AS kept,
                 vk.id AS vaultKeepId,
                 a.*
             FROM vaultkeeps vk
-            JOIN keeps k on vk.keepId = k.id
+            JOIN keeps k ON vk.keepId = k.id
             JOIN accounts a ON k.creatorId = a.id
-            WHERE vk.vaultId = @id
-            GROUP BY vk.id;
+            WHERE vk.vaultId = @id;
             ";
-            return _db.Query<KeepVaultKeepVM, Profile, KeepVaultKeepVM>(sql, (vm, account) => {
+            List<KeepVaultKeepVM> found = _db.Query<KeepVaultKeepVM, Profile, KeepVaultKeepVM>(sql, (vm, account) => {
                 vm.Creator = account;
                 return vm;
             },new { id }).ToList();
+
+            // Because using a WHERE to check by vaultId would only select vaultkeeps from this vault
+            //  we have to manually populate the kept on for each keep
+            sql = @"
+            SELECT
+                COUNT(k.id = vk.id)
+            FROM vaultkeeps vk
+            JOIN keeps k ON vk.keepId = k.id
+            WHERE vk.keepId = @Id;
+            ";
+            foreach(KeepVaultKeepVM keep in found)
+            {
+                keep.Kept = _db.ExecuteScalar<int>(sql, keep);
+            }
+            return found;
         }
 
         internal List<VaultKeep> GetByKeepAndUserIds(int keepId, string userId)

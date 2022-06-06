@@ -8,9 +8,9 @@
                 <h1 class="text-black">{{vault?.name}}</h1>
                 <button v-if="isUsersVault" class="btn btn-outline-secondary my-auto" @click="deleteVault">Delete Vault</button>
             </div>
-            <h6 v-if="vault" class="text-black">Keeps: {{keeps.length}}</h6>
+            <h6 v-if="vault" class="text-black">Keeps: {{keeps?.length}}</h6>
             <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
-            <h1 v-if="keeps.length == 0" class="mt-3 mx-auto text-secondary">Vault has no keeps</h1>
+            <h1 v-if="keeps?.length == 0" class="mt-3 mx-auto text-secondary">Vault has no keeps</h1>
             <div class="masonry-with-columns">
                 <KeepCard v-for="k in keeps" :key="k.id" :keep="k" :isProfile="true" />
             </div>
@@ -73,7 +73,7 @@ export default
             resetPage,
             vault: computed(() => AppState.activeVault),
             keeps: computed(() => AppState.activeKeeps),
-            isUsersVault: computed(() => AppState.account.id === AppState.activeVault.creatorId),
+            isUsersVault: computed(() => AppState.account.id === AppState.activeVault?.creatorId),
             openModal: computed(() => AppState.openModal),
             async mountedFunc()
             {
@@ -82,6 +82,7 @@ export default
                     this.loading = true;
                     this.resetPage();
                     const loader = new Loader();
+                    logger.log("Loading")
                     loader.step(vaultsService.getById, [this.route.params.id]);
                     loader.step(keepsService.getByVault, [this.route.params.id]);
                     await loader.load();
@@ -91,7 +92,7 @@ export default
                 {
                     this.loading = false;
                     logger.error("[Vault.vue > mountedFunc]", error.message);
-                    router.push({name: "Home"});
+                    // router.push({name: "Home"});
                     await Pop.confirm("You do not have permission to view this vault", "You have been redirected to the home page", "info", "Okay", false);
                 }
             },
