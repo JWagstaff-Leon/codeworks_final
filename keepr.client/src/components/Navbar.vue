@@ -1,25 +1,13 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3 justify-content-between flex-nowrap">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
         <img alt="logo" src="../assets/img/Logo.svg" height="45" />
       </div>
     </router-link>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarText"
-      aria-controls="navbarText"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon" />
-    </button>
-    <div class="collapse navbar-collapse ms-auto" id="navbarText">
       <!-- LOGIN COMPONENT HERE -->
-      <Login class="ms-auto"/>
-    </div>
+        <Search class="flex-grow-1" />
+      <Login class="ms-3"/>
   </nav>
 </template>
 

@@ -14,5 +14,7 @@ export const AppState = reactive({
   activeProfile: null,
   activeVaults: null,
 
-  activeVault: null
+  activeVault: null,
+
+  searchTerm: ""
 })

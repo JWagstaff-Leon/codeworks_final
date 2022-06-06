@@ -22,7 +22,7 @@
             height="40"
             class="rounded"
           />
-          <span class="mx-3 text-seconary darken-20 fs-5">{{ account.name }}</span>
+          <span class="mx-3 text-secondary darken-20 fs-5 d-none d-md-inline">{{ account.name }}</span>
         </div>
       </div>
       <div
