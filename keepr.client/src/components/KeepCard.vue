@@ -36,9 +36,10 @@ export default
         return {
             makeActive()
             {
-                AppState.openModal = true;
-                keepsService.getById(props.keep.id);
-                vaultkeepsService.getUsersByKeepId(props.keep.id);
+                keepsService.setActive(props.keep.id);
+                // AppState.openModal = true;
+                // keepsService.getById(props.keep.id);
+                // vaultkeepsService.getUsersByKeepId(props.keep.id);
             },
 
             openProfile()

@@ -1,6 +1,7 @@
 import { AppState } from "../AppState.js";
 import { logger } from "../utils/Logger.js";
 import { api } from "./AxiosService.js";
+import { vaultkeepsService } from "./VaultkeepsService.js";
 
 class KeepsService
 {
@@ -25,11 +26,26 @@ class KeepsService
         AppState.activeKeeps = res.data;
     }
 
+    async create(data)
+    {
+        const res = await api.post("api/keeps", data);
+        logger.log("[KeepsService > create > response]", res.data);
+        AppState.activeKeeps.push(res.data);
+        return res.data.id;
+    }
+
     async remmove(id)
     {
         const res = await api.delete("api/keeps/" + id);
         logger.log("[KeepsService > remove > response]");
         AppState.keeps = AppState.keeps.filter(keep => keep.id != res.data.id);
+    }
+
+    setActive(id)
+    {
+        AppState.openModal = true;
+        this.getById(id);
+        vaultkeepsService.getUsersByKeepId(id);
     }
 }
 
