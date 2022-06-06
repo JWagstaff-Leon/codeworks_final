@@ -24,7 +24,7 @@ export default
     {
         const router = useRouter();
         return {
-            openProfile()
+            openVault()
             {
                 router.push({name: "Vault", params: {id: props.vault.id}});
             }

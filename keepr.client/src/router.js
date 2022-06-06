@@ -18,6 +18,12 @@ const routes = [
     component: loadPage('Profile')
   },
   {
+      path: "/vault/:id",
+      name: "Vault",
+      component: loadPage("Vault"),
+      beforeEnter: authSettled
+  },
+  {
     path: '/account',
     name: 'Account',
     component: loadPage('AccountPage'),

@@ -17,6 +17,13 @@ class VaultsService
         logger.log("[VaultsService > getByProfile > response]", res.data);
         AppState.activeVaults = res.data;
     }
+
+    async create(data)
+    {
+        const res = await api.post("api/vaults", data)
+        logger.log("[VaultsService > create > response]", res.data);
+        return res.data.id;
+    }
 }
 
 export const vaultsService = new VaultsService();
