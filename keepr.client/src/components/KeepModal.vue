@@ -17,7 +17,7 @@
                             <span class="mx-2 text-secondary fs-5 no-select" :title="`Kept in ${activeKeep?.kept} vault${activeKeep?.kept == 1 ? '' : 's'}`"><img src="../assets/img/Kept.svg" class="me-1" />{{activeKeep?.kept}}</span>
                         </div>
                         <h3 class="mt-4 text-dark px-1 px-xl-5">{{activeKeep?.name}}</h3>
-                        <p class="text-secondary mt-1 mt-xl-4 fs-6 text-start align-self-start mx-2 mx-xl-5 flex-grow-1 px-0 px-xl-5">{{activeKeep?.description}}</p>
+                        <p class="text-secondary mt-1 mt-xl-4 fs-6 text-start align-self-start mx-2 mx-xl-5 flex-grow-1 px-1 px-xl-5">{{activeKeep?.description}}</p>
                         <div class="d-flex flex-column flex-xl-row align-items-center w-100 px-5" :class="{'justify-content-between': userAuthenticated, 'justify-content-end': !userAuthenticated}">
                             <div v-if="userAuthenticated" class="order-2 order-xl-1">
                                 <div v-if="activeKeep?.vaultKeepId && isUsersVault" class="my-2 my-xl-0">

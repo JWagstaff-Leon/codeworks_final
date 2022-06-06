@@ -3,7 +3,7 @@
         <div class="spinner-border text-secondary"></div>
     </div>
     <div v-else>
-        <div class="d-flex flex-column mx-3 mx-md-3">
+        <div class="d-flex flex-column mx-3 mx-md-5">
             <div class="d-flex mt-5 align-items-center">
                 <img :src="profile?.picture" class="profile-image rounded-2">
                 <div class="d-flex flex-column ms-3 ms-md-5 text-black">
