@@ -2,7 +2,8 @@
     <div v-if="!keeps" class="w-100 h-100 flex-grow-1 align-items-center justify-content-center d-flex">
         <div class="spinner-border text-secondary"></div>
     </div>
-    <div class="mx-5">
+    <div class="mx-3 mx-md-5">
+        <h1 v-if="keeps.length == 0" class="mt-3 mx-auto text-secondary">There are no keeps</h1>
         <div class="masonry-with-columns">
             <KeepCard v-for="k in keeps" :key="k.id" :keep="k" />
         </div>
@@ -67,10 +68,10 @@ export default {
 
 <style scoped lang="scss">
 .masonry-with-columns {
-  columns: 4 200px;
+  columns: 4 150px;
   column-gap: 1.75rem;
   div {
-    width: 150px;
+    width: 125px;
     display: inline-block;
     width: 100%;
   }

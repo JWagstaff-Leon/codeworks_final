@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex justify-content-center">
         <label for="search-bar" class="visually-hidden">Search</label>
-        <div class="input-group w-50">
+        <div class="input-group">
             <input name="serach-bar" type="text" placeholder="Search" class="form-control" v-model="searchTerm" @input="changeSearch" @focus="changeSearch" />
             <span class="input-group-text"><i class="mdi mdi-magnify mdi-18px text-primary"></i></span>
         </div>
@@ -43,5 +43,18 @@ export default
 .btn
 {
     box-shadow: none !important;
+}
+
+.input-group
+{
+    width: 50%;
+}
+
+@media only screen and (max-width: 768px)
+{
+    .input-group
+    {
+        width: 80%;
+    }
 }
 </style>

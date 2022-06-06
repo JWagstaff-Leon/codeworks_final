@@ -58,4 +58,13 @@ export default
     top: 0.25rem;
     right: 0.25rem;
 }
+
+@media only screen and (max-width: 768px)
+{
+    .vault-card
+    {
+        height: 8rem;
+        width: 80vw;
+    }
+}
 </style>

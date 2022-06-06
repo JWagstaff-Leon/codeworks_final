@@ -3,7 +3,7 @@
         <div class="spinner-border text-secondary"></div>
     </div>
     <div v-else >
-        <div class="d-flex flex-column mx-5 mt-5">
+        <div class="d-flex flex-column mx-3 mx-md-5 mt-5">
             <div class="d-flex justify-content-between">
                 <h1 class="text-black">{{vault?.name}}</h1>
                 <button v-if="isUsersVault" class="btn btn-outline-secondary my-auto" @click="deleteVault">Delete Vault</button>
@@ -11,7 +11,7 @@
             <h6 v-if="vault" class="text-black">Keeps: {{keeps?.length}}</h6>
             <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
             <h1 v-if="keeps?.length == 0" class="mt-3 mx-auto text-secondary">Vault has no keeps</h1>
-            <h1 v-if="filteredKeeps?.length == 0" class="mt-3 mx-auto text-secondary">No keeps matching search</h1>
+            <h1 v-else-if="filteredKeeps?.length == 0" class="mt-3 mx-auto text-secondary">No keeps matching search</h1>
             <div class="masonry-with-columns">
                 <KeepCard v-for="k in filteredKeeps" :key="k.id" :keep="k" :isProfile="true" />
             </div>
@@ -34,7 +34,6 @@ export default
 {
     async mounted()
     {
-        AppState.searchTerm = "";
         await this.mountedFunc();
     },
 
@@ -54,6 +53,15 @@ export default
             else
             {
                 Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide();
+            }
+        },
+
+        'route.params.id'(newVault)
+        {
+            if(newVault)
+            {
+                this.resetPage();
+                this.mountedFunc();
             }
         }
     },
@@ -83,6 +91,7 @@ export default
                 try
                 {
                     this.loading = true;
+                    AppState.searchTerm = "";
                     this.resetPage();
                     const loader = new Loader();
                     logger.log("Loading")
@@ -129,10 +138,10 @@ export default
 }
 
 .masonry-with-columns {
-  columns: 6 200px;
+  columns: 6 150px;
   column-gap: 1.75rem;
   div {
-    width: 150px;
+    width: 125px;
     display: inline-block;
     width: 100%;
   }

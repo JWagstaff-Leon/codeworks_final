@@ -3,10 +3,10 @@
         <div class="spinner-border text-secondary"></div>
     </div>
     <div v-else>
-        <div class="d-flex flex-column mx-5">
+        <div class="d-flex flex-column mx-3 mx-md-3">
             <div class="d-flex mt-5 align-items-center">
                 <img :src="profile?.picture" class="profile-image rounded-2">
-                <div class="d-flex flex-column ms-5 text-black">
+                <div class="d-flex flex-column ms-3 ms-md-5 text-black">
                     <h1>{{profile?.name}}</h1>
                     <h3>Vaults: {{vaults?.length}}</h3>
                     <h3>Keeps: {{keeps?.length}}</h3>
@@ -54,7 +54,6 @@ export default
 {
     async mounted()
     {
-        AppState.searchTerm = "";
         await this.mountedFunc();
     },
 
@@ -121,6 +120,7 @@ export default
                 try
                 {
                     this.loading = true;
+                    AppState.searchTerm = "";
                     this.resetPage();
                     const loader = new Loader();
                     loader.step(profilesService.getById, [this.route.params.id]);
@@ -149,10 +149,10 @@ export default
 }
 
 .masonry-with-columns {
-  columns: 6 200px;
+  columns: 6 150px;
   column-gap: 1.75rem;
   div {
-    width: 150px;
+    width: 125px;
     display: inline-block;
     width: 100%;
   }
@@ -162,5 +162,15 @@ export default
 {
     height: 15vh;
     width: 15vh;
+}
+
+@media only screen and (max-width: 768px)
+{
+    .profile-image
+    {
+        height: 7.5rem;
+        width: 7.5rem;
+        object-fit: cover;
+    }
 }
 </style>
