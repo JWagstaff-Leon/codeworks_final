@@ -14,9 +14,11 @@
             </div>
             <h1 class="mt-5 text-black">Vaults <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new vault" @click="newItemModal(true)"></i></h1>
             <div class="d-flex flex-wrap">
+                <h1 v-if="vaults.length == 0" class="mt-3 mx-auto text-secondary">User has no vaults</h1>
                 <VaultCard v-for="v in vaults" :key="v.id" :vault="v" />
             </div>
             <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
+                <h1 v-if="keeps.length == 0" class="mt-3 mx-auto text-secondary">User has no keeps</h1>
             <div class="masonry-with-columns">
                 <KeepCard v-for="k in keeps" :key="k.id" :keep="k" :isProfile="true" />
             </div>
@@ -50,28 +52,12 @@ export default
 {
     async mounted()
     {
-        try
-        {
-            const loader = new Loader();
-            loader.step(profilesService.getById, [this.route.params.id]);
-            loader.step(vaultsService.getByProfile, [this.route.params.id]);
-            loader.step(keepsService.getByProfile, [this.route.params.id]);
-            await loader.load();
-            this.loading = false;
-        }
-        catch(error)
-        {
-            logger.error("[Profile.vue > mounted]", error.message);
-            Pop.toast(error.message, "error");
-        }
+        await this.mountedFunc();
     },
 
     beforeUnmount()
     {
-        AppState.activeProfile = null;
-        AppState.activeVaults = null;
-        AppState.activeKeeps = null;
-        AppState.openModal = false;
+        this.beforeUnmountFunc();
     },
 
     watch:
@@ -85,6 +71,16 @@ export default
             else
             {
                 Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide();
+            }
+        },
+
+        'route.params.id'(newProfile)
+        {
+            logger.log("----------------------TEST--------------------");
+            if(newProfile)
+            {
+                this.beforeUnmountFunc();
+                this.mountedFunc();
             }
         }
     },
@@ -107,6 +103,31 @@ export default
             {
                 newItemIsVault.value = isVault;
                 Modal.getOrCreateInstance(document.getElementById("new-item-modal")).show();
+            },
+            beforeUnmountFunc()
+            {
+                AppState.activeProfile = null;
+                AppState.activeVaults = null;
+                AppState.activeKeeps = null;
+                AppState.openModal = false;
+            },
+            async mountedFunc()
+            {
+                try
+                {
+                    this.loading = true;
+                    const loader = new Loader();
+                    loader.step(profilesService.getById, [this.route.params.id]);
+                    loader.step(vaultsService.getByProfile, [this.route.params.id]);
+                    loader.step(keepsService.getByProfile, [this.route.params.id]);
+                    await loader.load();
+                    this.loading = false;
+                }
+                catch(error)
+                {
+                    logger.error("[Profile.vue > mounted]", error.message);
+                    Pop.toast(error.message, "error");
+                }
             }
         }
     }

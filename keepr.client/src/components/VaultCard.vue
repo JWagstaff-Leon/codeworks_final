@@ -4,6 +4,7 @@
         <div class="position-absolute card-text w-100 px-2">
             <h4 class="text-light m-0 fw-bold no-select">{{vault.name}}</h4>
         </div>
+        <i v-if="vault.isPrivate" class="position-absolute private-icon text-warning mdi mdi-lock"></i>
     </div>
 </template>
 
@@ -50,5 +51,11 @@ export default
 .card-text
 {
     bottom: 0.75rem;
+}
+
+.private-icon
+{
+    top: 0.25rem;
+    right: 0.25rem;
 }
 </style>
