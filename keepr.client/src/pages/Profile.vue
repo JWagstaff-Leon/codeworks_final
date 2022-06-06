@@ -13,7 +13,7 @@
                 </div>
             </div>
             <h1 class="mt-5 text-black">Vaults <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new vault" @click="newItemModal(true)"></i></h1>
-            <div class="d-flex flex-wrap">
+            <div class="d-flex flex-wrap vault-cards-container">
                 <h1 v-if="vaults.length == 0" class="mt-3 mx-auto text-secondary">User has no vaults</h1>
                 <h1 v-else-if="filteredVaults.length == 0" class="mt-3 mx-auto text-secondary">No vaults matching search</h1>
                 <VaultCard v-for="v in filteredVaults" :key="v.id" :vault="v" />
@@ -164,6 +164,11 @@ export default
     width: 15vh;
 }
 
+.vault-cards-container
+{
+    justify-content: unset;
+}
+
 @media only screen and (max-width: 768px)
 {
     .profile-image
@@ -171,6 +176,11 @@ export default
         height: 7.5rem;
         width: 7.5rem;
         object-fit: cover;
+    }
+
+    .vault-cards-container
+    {
+        justify-content: center;
     }
 }
 </style>
