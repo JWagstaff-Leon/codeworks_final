@@ -4,7 +4,10 @@
     </div>
     <div v-else>
         <div class="d-flex flex-column mx-5 mt-5">
-            <h1 class="text-black">{{activeVault?.name}}</h1>
+            <div class="d-flex justify-content-between">
+                <h1 class="text-black">{{activeVault?.name}}</h1>
+                <button v-if="true /*isUsersVault*/" class="btn btn-outline-secondary my-auto" @click="deleteVault">Delete Vault</button>
+            </div>
         </div>
     </div>
 </template>
@@ -25,6 +28,11 @@ export default
         await this.mountedFunc();
     },
 
+    beforeUnmount()
+    {
+        this.resetPage();
+    },
+
     setup()
     {
         const route = useRoute();
@@ -40,6 +48,7 @@ export default
             loading,
             resetPage,
             activeVault: computed(() => AppState.activeVault),
+            isUsersVault: computed(() => AppState.account.id === AppState.activeVault.creatorId),
             async mountedFunc()
             {
                 try
@@ -58,6 +67,23 @@ export default
                     logger.error("[Vault.vue > mountedFunc]", error.message);
                     router.push({name: "Home"});
                     await Pop.confirm("You do not have permission to view this vault", "You have been redirected to the home page", "info", "Okay", false);
+                }
+            },
+            async deleteVault()
+            {
+                try
+                {
+                    if(await Pop.confirm())
+                    {
+                        await vaultsService.remove(this.route.params.id);
+                        router.push({name: "Home"});
+                        Pop.toast("Vault successfully deleted", "success");
+                    }
+                }
+                catch(error)
+                {
+                    logger.error("[Vault.vue > deleteVault]", error.message);
+                    Pop.toast(error.message, "error");
                 }
             }
         }
