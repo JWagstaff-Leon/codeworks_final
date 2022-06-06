@@ -98,8 +98,8 @@ export default
             },
             openProfile()
             {
-                clearActive();
                 setTimeout(() => { router.push({name: "Profile", params: {id: activeKeep.value?.creator.id}}); }, 150);
+                clearActive();
             },
             async removeFromVault()
             {

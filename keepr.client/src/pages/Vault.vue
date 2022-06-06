@@ -104,7 +104,7 @@ export default
                 {
                     this.loading = false;
                     logger.error("[Vault.vue > mountedFunc]", error.message);
-                    // router.push({name: "Home"});
+                    router.push({name: "Home"});
                     await Pop.confirm("You do not have permission to view this vault", "You have been redirected to the home page", "info", "Okay", false);
                 }
             },
