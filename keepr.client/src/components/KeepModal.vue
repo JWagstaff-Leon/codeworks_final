@@ -13,17 +13,22 @@
                     <div class="w-50 d-flex flex-column align-items-center">
                         <button type="button" class="btn-close align-self-end" data-bs-dismiss="modal" aria-label="Close" @click="clearActive"></button>
                         <div class="d-flex justify-content-center px-5">
-                            <span class="mx-2 text-secondary fs-5 no-select" :title="`Viewed ${activeKeep.views} time${activeKeep.views == 1 ? '' : 's'}`"><i class="mdi mdi-eye text-primary me-1"></i>{{activeKeep?.views}}</span>
-                            <span class="mx-2 text-secondary fs-5 no-select" :title="`Kept in ${activeKeep.kept} vault${activeKeep.kept == 1 ? '' : 's'}`"><img src="../assets/img/Kept.svg" class="me-1" />{{activeKeep?.kept}}</span>
+                            <span class="mx-2 text-secondary fs-5 no-select" :title="`Viewed ${activeKeep?.views} time${activeKeep?.views == 1 ? '' : 's'}`"><i class="mdi mdi-eye text-primary me-1"></i>{{activeKeep?.views}}</span>
+                            <span class="mx-2 text-secondary fs-5 no-select" :title="`Kept in ${activeKeep?.kept} vault${activeKeep?.kept == 1 ? '' : 's'}`"><img src="../assets/img/Kept.svg" class="me-1" />{{activeKeep?.kept}}</span>
                         </div>
                         <h1 class="mt-4 text-dark px-5">{{activeKeep?.name}}</h1>
-                        <p class="text-secondary mt-4 fs-5 text-start align-self-start mx-5 flex-grow-1 px-5">{{activeKeep.description}}</p>
+                        <p class="text-secondary mt-4 fs-5 text-start align-self-start mx-5 flex-grow-1 px-5">{{activeKeep?.description}}</p>
                         <div class="d-flex align-items-center w-100 px-5" :class="{'justify-content-between': userAuthenticated, 'justify-content-end': !userAuthenticated}">
-                            <div v-if="userAuthenticated" class="dropdown">
-                                <button class="btn btn-outline-primary fw-bold dropdown-toggle" data-bs-toggle="dropdown">ADD TO VAULT</button>
-                                <ul class="dropdown-menu">
-                                    <li v-for="v in userVaults" :key="v.id" class="no-select" :class="{'selectable text-black': !activeVaultkeeps.find(vk => vk.vaultId == v.id), 'no-add text-secondary': activeVaultkeeps.find(vk => vk.vaultId == v.id)}" :title="activeVaultkeeps.find(vk => vk.vaultId == v.id) ? 'Keep is already in this vault' : ''" @click="addToVault(v.id, !activeVaultkeeps.find(vk => vk.vaultId == v.id))">{{v.name}}</li>
-                                </ul>
+                            <div v-if="userAuthenticated">
+                                <div v-if="activeKeep?.vaultKeepId && isUsersVault">
+                                    <button class="btn btn-outline-secondary" @click="removeFromVault">Remove from vault</button>
+                                </div>
+                                <div v-else class="dropdown">
+                                    <button class="btn btn-outline-primary fw-bold dropdown-toggle" data-bs-toggle="dropdown">ADD TO VAULT</button>
+                                    <ul class="dropdown-menu">
+                                        <li v-for="v in userVaults" :key="v.id" class="no-select" :class="{'selectable text-black': !activeVaultkeeps.find(vk => vk.vaultId == v.id), 'no-add text-secondary': activeVaultkeeps.find(vk => vk.vaultId == v.id)}" :title="activeVaultkeeps.find(vk => vk.vaultId == v.id) ? 'Keep is already in this vault' : ''" @click="addToVault(v.id, !activeVaultkeeps.find(vk => vk.vaultId == v.id))">{{v.name}}</li>
+                                    </ul>
+                                </div>
                             </div>
                             <i v-if="isUsersKeep" class="mdi mdi-delete-outline text-secondary delete-keep-button action fs-1" @click="deleteKeep"></i>
                             <div class="d-flex align-items-end selectable p-1" @click="openProfile" :title="`Open ${activeKeep?.creator.name}'s profile`">
@@ -44,7 +49,8 @@ import { AppState } from '../AppState.js'
 import Pop from '../utils/Pop.js'
 import { keepsService } from '../services/KeepsService.js';
 import { vaultkeepsService } from "../services/VaultkeepsService.js";
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { logger } from '../utils/Logger.js';
 export default
 {
     setup()
@@ -55,11 +61,14 @@ export default
                 setTimeout(() => { AppState.activeKeep = null; AppState.activeVaultkeeps = null; }, 150);                
             };
         const router = useRouter();
+        const route = useRoute();
         return {
             activeKeep,
+            route,
             activeVaultkeeps: computed(() => AppState.activeVaultkeeps),
             userAuthenticated: computed(() => AppState.user.isAuthenticated),
             isUsersKeep: computed(() => AppState.account.id === AppState.activeKeep?.creator.id),
+            isUsersVault: computed(() => AppState.activeVault?.creatorId == AppState.account?.id),
             userVaults: computed(() => AppState.userVaults),
             clearActive,
             async deleteKeep()
@@ -91,6 +100,23 @@ export default
             {
                 clearActive();
                 setTimeout(() => { router.push({name: "Profile", params: {id: activeKeep.value?.creator.id}}); }, 150);
+            },
+            async removeFromVault()
+            {
+                try
+                {
+                    if(await Pop.confirm())
+                    {
+                        await vaultkeepsService.remove(activeKeep.value?.vaultKeepId);
+                        Pop.toast("Keep successfully removed from vault", "success");
+                        clearActive();
+                    }
+                }
+                catch(error)
+                {
+                    logger.error("[KeepModal.vue > removeFromVault]", error.message);
+                    Pop.toast(error.message, "error");
+                }
             }
         }
     }

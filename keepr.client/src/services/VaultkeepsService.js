@@ -18,6 +18,13 @@ class VaultkeepsService
         AppState.activeVaultkeeps.push(res.data);
         AppState.activeKeep.kept += 1;
     }
+
+    async remove(id)
+    {
+        const res = await api.delete("api/vaultkeeps/" + id);
+        logger.log("[VaultkeepsService > remove > response]", res.data);
+        AppState.activeKeeps = AppState.activeKeeps.filter(keep => keep.id != res.data.keepId);
+    }
 }
 
 export const vaultkeepsService = new VaultkeepsService();

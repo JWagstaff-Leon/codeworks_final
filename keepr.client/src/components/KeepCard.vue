@@ -34,7 +34,7 @@ export default
         return {
             makeActive()
             {
-                keepsService.setActive(props.keep.id);
+                keepsService.setActive(props.keep);
             },
 
             openProfile()

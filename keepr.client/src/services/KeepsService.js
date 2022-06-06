@@ -16,7 +16,7 @@ class KeepsService
     {
         const res = await api.get("api/keeps/" + id);
         logger.log("[KeepsService > getById > response]", res.data);
-        AppState.activeKeep = res.data;
+        // AppState.activeKeep = res.data;
     }
 
     async getByProfile(id)
@@ -48,11 +48,13 @@ class KeepsService
         AppState.keeps = AppState.keeps.filter(keep => keep.id != res.data.id);
     }
 
-    setActive(id)
+    async setActive(keep)
     {
         AppState.openModal = true;
-        this.getById(id);
-        vaultkeepsService.getUsersByKeepId(id);
+        await vaultkeepsService.getUsersByKeepId(keep.id);
+        await this.getById(keep.id);
+        keep.views += 1;
+        AppState.activeKeep = keep;
     }
 }
 

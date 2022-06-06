@@ -2,14 +2,21 @@
     <div v-if="loading" class="w-100 h-100 flex-grow-1 align-items-center justify-content-center d-flex">
         <div class="spinner-border text-secondary"></div>
     </div>
-    <div v-else>
+    <div v-else >
         <div class="d-flex flex-column mx-5 mt-5">
             <div class="d-flex justify-content-between">
-                <h1 class="text-black">{{activeVault?.name}}</h1>
-                <button v-if="true /*isUsersVault*/" class="btn btn-outline-secondary my-auto" @click="deleteVault">Delete Vault</button>
+                <h1 class="text-black">{{vault?.name}}</h1>
+                <button v-if="isUsersVault" class="btn btn-outline-secondary my-auto" @click="deleteVault">Delete Vault</button>
+            </div>
+            <h6 v-if="vault" class="text-black">Keeps: {{keeps.length}}</h6>
+            <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
+            <h1 v-if="keeps.length == 0" class="mt-3 mx-auto text-secondary">Vault has no keeps</h1>
+            <div class="masonry-with-columns">
+                <KeepCard v-for="k in keeps" :key="k.id" :keep="k" :isProfile="true" />
             </div>
         </div>
     </div>
+    <KeepModal id="keep-modal" />
 </template>
 
 <script>
@@ -21,6 +28,7 @@ import Loader from '../utils/Loader.js';
 import { vaultsService } from '../services/VaultsService.js';
 import { useRoute, useRouter } from 'vue-router';
 import { keepsService } from '../services/KeepsService.js';
+import { Modal } from 'bootstrap';
 export default
 {
     async mounted()
@@ -33,6 +41,21 @@ export default
         this.resetPage();
     },
 
+    watch:
+    {
+        openModal(openModal)
+        {
+            if(openModal)
+            {
+                Modal.getOrCreateInstance(document.getElementById("keep-modal")).show();
+            }
+            else
+            {
+                Modal.getOrCreateInstance(document.getElementById("keep-modal")).hide();
+            }
+        }
+    },
+
     setup()
     {
         const route = useRoute();
@@ -42,13 +65,16 @@ export default
             {
                 AppState.activeVault = null;
                 AppState.activeKeeps = null;
+                AppState.openModal = false;
             };
         return {
             route,
             loading,
             resetPage,
-            activeVault: computed(() => AppState.activeVault),
+            vault: computed(() => AppState.activeVault),
+            keeps: computed(() => AppState.activeKeeps),
             isUsersVault: computed(() => AppState.account.id === AppState.activeVault.creatorId),
+            openModal: computed(() => AppState.openModal),
             async mountedFunc()
             {
                 try
@@ -96,5 +122,15 @@ export default
 {
     height: 15vh;
     width: 15vh;
+}
+
+.masonry-with-columns {
+  columns: 6 200px;
+  column-gap: 1.75rem;
+  div {
+    width: 150px;
+    display: inline-block;
+    width: 100%;
+  }
 }
 </style>
