@@ -11,6 +11,13 @@ class VaultsService
         AppState.userVaults = res.data;
     }
 
+    async getById(id)
+    {
+        const res = await api.get("api/vaults/" + id);
+        logger.log("[VaultsService > getById > response]", res.data);
+        AppState.activeVault = res.data;
+    }
+
     async getByProfile(id)
     {
         const res = await api.get("api/profiles/" + id + "/vaults");
@@ -20,7 +27,7 @@ class VaultsService
 
     async create(data)
     {
-        const res = await api.post("api/vaults", data)
+        const res = await api.post("api/vaults", data);
         logger.log("[VaultsService > create > response]", res.data);
         return res.data.id;
     }

@@ -26,6 +26,13 @@ class KeepsService
         AppState.activeKeeps = res.data;
     }
 
+    async getByVault(id)
+    {
+        const res = await api.get("api/vaults/" + id + "/keeps");
+        logger.log("[KeepsService > getByVault > response]", res.data);
+        AppState.activeKeeps = res.data;
+    }
+
     async create(data)
     {
         const res = await api.post("api/keeps", data);
@@ -34,7 +41,7 @@ class KeepsService
         return res.data.id;
     }
 
-    async remmove(id)
+    async remove(id)
     {
         const res = await api.delete("api/keeps/" + id);
         logger.log("[KeepsService > remove > response]");
