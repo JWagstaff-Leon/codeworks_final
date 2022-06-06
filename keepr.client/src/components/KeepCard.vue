@@ -10,9 +10,7 @@
 
 <script>
 import { useRouter } from 'vue-router'
-import { AppState } from '../AppState.js';
 import { keepsService } from '../services/KeepsService.js';
-import { vaultkeepsService } from "../services/VaultkeepsService.js";
 export default
 {
     props:
@@ -37,9 +35,6 @@ export default
             makeActive()
             {
                 keepsService.setActive(props.keep.id);
-                // AppState.openModal = true;
-                // keepsService.getById(props.keep.id);
-                // vaultkeepsService.getUsersByKeepId(props.keep.id);
             },
 
             openProfile()

@@ -68,7 +68,7 @@ export default
                 {
                     if(await Pop.confirm())
                     {
-                        await keepsService.remmove(activeKeep.value?.id);
+                        await keepsService.remove(activeKeep.value?.id);
                         Pop.toast("Keep successfully deleted", "success");
                         clearActive();
                     }

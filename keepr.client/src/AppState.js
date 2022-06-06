@@ -13,5 +13,7 @@ export const AppState = reactive({
 
   activeProfile: null,
   activeVaults: null,
-  activeKeeps: null
+  activeKeeps: null,
+
+  activeVault: null
 })

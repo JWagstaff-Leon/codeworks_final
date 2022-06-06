@@ -57,7 +57,7 @@ export default
 
     beforeUnmount()
     {
-        this.beforeUnmountFunc();
+        this.resetPage();
     },
 
     watch:
@@ -76,10 +76,9 @@ export default
 
         'route.params.id'(newProfile)
         {
-            logger.log("----------------------TEST--------------------");
             if(newProfile)
             {
-                this.beforeUnmountFunc();
+                this.resetPage();
                 this.mountedFunc();
             }
         }
@@ -90,6 +89,13 @@ export default
         const route = useRoute();
         const loading = ref(true);
         const newItemIsVault = ref(false);
+        const resetPage = () =>
+            {
+                AppState.activeProfile = null;
+                AppState.activeVaults = null;
+                AppState.activeKeeps = null;
+                AppState.openModal = false;
+            }
         return {
             route,
             loading,
@@ -104,18 +110,13 @@ export default
                 newItemIsVault.value = isVault;
                 Modal.getOrCreateInstance(document.getElementById("new-item-modal")).show();
             },
-            beforeUnmountFunc()
-            {
-                AppState.activeProfile = null;
-                AppState.activeVaults = null;
-                AppState.activeKeeps = null;
-                AppState.openModal = false;
-            },
+            resetPage,
             async mountedFunc()
             {
                 try
                 {
                     this.loading = true;
+                    this.resetPage();
                     const loader = new Loader();
                     loader.step(profilesService.getById, [this.route.params.id]);
                     loader.step(vaultsService.getByProfile, [this.route.params.id]);
@@ -125,7 +126,7 @@ export default
                 }
                 catch(error)
                 {
-                    logger.error("[Profile.vue > mounted]", error.message);
+                    logger.error("[Profile.vue > mountedFunc]", error.message);
                     Pop.toast(error.message, "error");
                 }
             }
