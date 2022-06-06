@@ -11,8 +11,9 @@
             <h6 v-if="vault" class="text-black">Keeps: {{keeps?.length}}</h6>
             <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
             <h1 v-if="keeps?.length == 0" class="mt-3 mx-auto text-secondary">Vault has no keeps</h1>
+            <h1 v-if="filteredKeeps?.length == 0" class="mt-3 mx-auto text-secondary">No keeps matching search</h1>
             <div class="masonry-with-columns">
-                <KeepCard v-for="k in keeps" :key="k.id" :keep="k" :isProfile="true" />
+                <KeepCard v-for="k in filteredKeeps" :key="k.id" :keep="k" :isProfile="true" />
             </div>
         </div>
     </div>
@@ -33,6 +34,7 @@ export default
 {
     async mounted()
     {
+        AppState.searchTerm = "";
         await this.mountedFunc();
     },
 
@@ -73,6 +75,7 @@ export default
             resetPage,
             vault: computed(() => AppState.activeVault),
             keeps: computed(() => AppState.activeKeeps),
+            filteredKeeps: computed(() => AppState.activeKeeps?.filter(keep => keep.name.toLowerCase().includes(AppState.searchTerm.toLowerCase()))),
             isUsersVault: computed(() => AppState.account.id === AppState.activeVault?.creatorId),
             openModal: computed(() => AppState.openModal),
             async mountedFunc()

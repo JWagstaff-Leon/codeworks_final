@@ -44,6 +44,7 @@ export default {
     {
         try
         {
+            AppState.searchTerm = "";
             AppState.activeKeeps = null;
             await keepsService.getAll();
         }
@@ -57,7 +58,7 @@ export default {
     setup()
     {
         return {
-            keeps: computed(() => AppState.activeKeeps),
+            keeps: computed(() => AppState.activeKeeps?.filter(keep => keep.name.toLowerCase().includes(AppState.searchTerm.toLowerCase()))),
             openModal: computed(() => AppState.openModal)
         }
     }

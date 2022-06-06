@@ -15,12 +15,14 @@
             <h1 class="mt-5 text-black">Vaults <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new vault" @click="newItemModal(true)"></i></h1>
             <div class="d-flex flex-wrap">
                 <h1 v-if="vaults.length == 0" class="mt-3 mx-auto text-secondary">User has no vaults</h1>
-                <VaultCard v-for="v in vaults" :key="v.id" :vault="v" />
+                <h1 v-else-if="filteredVaults.length == 0" class="mt-3 mx-auto text-secondary">No vaults matching search</h1>
+                <VaultCard v-for="v in filteredVaults" :key="v.id" :vault="v" />
             </div>
             <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
                 <h1 v-if="keeps.length == 0" class="mt-3 mx-auto text-secondary">User has no keeps</h1>
+                <h1 v-else-if="filteredKeeps.length == 0" class="mt-3 mx-auto text-secondary">No keeps matching search</h1>
             <div class="masonry-with-columns">
-                <KeepCard v-for="k in keeps" :key="k.id" :keep="k" :isProfile="true" />
+                <KeepCard v-for="k in filteredKeeps" :key="k.id" :keep="k" :isProfile="true" />
             </div>
         </div>
         <KeepModal id="keep-modal" />
@@ -52,6 +54,7 @@ export default
 {
     async mounted()
     {
+        AppState.searchTerm = "";
         await this.mountedFunc();
     },
 
@@ -103,7 +106,9 @@ export default
             isCurrentUser: computed(() => AppState.account?.id === route.params.id),
             profile: computed(() => AppState.activeProfile),
             vaults: computed(() => AppState.activeVaults),
+            filteredVaults: computed(() => AppState.activeVaults?.filter(vault => vault.name.toLowerCase().includes(AppState.searchTerm.toLowerCase()))),
             keeps: computed(() => AppState.activeKeeps),
+            filteredKeeps: computed(() => AppState.activeKeeps?.filter(keep => keep.name.toLowerCase().includes(AppState.searchTerm.toLowerCase()))),
             openModal: computed(() => AppState.openModal),
             newItemModal(isVault)
             {
