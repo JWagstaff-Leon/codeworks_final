@@ -12,13 +12,13 @@
                     <h3>Keeps: {{keeps?.length}}</h3>
                 </div>
             </div>
-            <h1 class="mt-5 text-black">Vaults <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new vault" @click="newItemModal(true)"></i></h1>
+            <h1 class="mt-5 text-black">Vaults <i v-if="isCurrentUser" role="button" class="mdi mdi-plus text-primary fs-2 action" title="Create new vault" @click="newItemModal(true)"></i></h1>
             <div class="d-flex flex-wrap vault-cards-container">
                 <h1 v-if="vaults.length == 0" class="mt-3 mx-auto text-secondary">User has no vaults</h1>
                 <h1 v-else-if="filteredVaults.length == 0" class="mt-3 mx-auto text-secondary">No vaults matching search</h1>
                 <VaultCard v-for="v in filteredVaults" :key="v.id" :vault="v" />
             </div>
-            <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
+            <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" role="button" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>
                 <h1 v-if="keeps.length == 0" class="mt-3 mx-auto text-secondary">User has no keeps</h1>
                 <h1 v-else-if="filteredKeeps.length == 0" class="mt-3 mx-auto text-secondary">No keeps matching search</h1>
             <div class="masonry-with-columns">

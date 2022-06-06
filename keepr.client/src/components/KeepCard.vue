@@ -56,7 +56,12 @@ export default
 
 .card-text
 {
-    bottom: 0.75rem;
+    bottom: 0px;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-bottom-left-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
 }
 
 .profile-image
