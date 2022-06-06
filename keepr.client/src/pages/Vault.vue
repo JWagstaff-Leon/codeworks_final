@@ -56,6 +56,7 @@ export default
             }
         },
 
+// TODO ignore this on route change
         'route.params.id'(newVault)
         {
             if(newVault)

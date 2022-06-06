@@ -31,9 +31,9 @@ export default
             {
                 try
                 {
-                    const newKeepId = await keepsService.create(newData.value);
+                    const newKeep = await keepsService.create(newData.value);
                     Modal.getOrCreateInstance(document.getElementById("new-item-modal")).hide();
-                    keepsService.setActive(newKeepId);
+                    keepsService.setActive(newKeep);
                     Pop.toast("Keep successfully created", "success");
                 }
                 catch(error)
