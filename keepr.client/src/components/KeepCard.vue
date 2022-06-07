@@ -1,6 +1,6 @@
 <template>
     <div class="my-3 rounded-3 position-relative action" @click="makeActive" :title="`Open details for ${keep.name}`">
-        <img :src="keep.img" class="rounded-3 elevation-4 card-image" />
+        <img :src="keep.img" class="rounded-3 elevation-4 card-image" :alt="'Image of keep ' + keep.name" />
         <div class="position-absolute card-text d-flex justify-content-between align-items-end w-100 px-2">
             <h4 class="text-light m-0 fw-bold no-select">{{keep.name}}</h4>
             <img v-if="!isProfile" :src="keep.creator.picture" class="profile-image rounded-circle action" @click.stop="openProfile" :title="`Open ${keep.creator.name}'s profile`" />

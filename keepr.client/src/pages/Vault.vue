@@ -13,7 +13,7 @@
             <h1 v-if="keeps?.length == 0" class="mt-3 mx-auto text-secondary">Vault has no keeps</h1>
             <h1 v-else-if="filteredKeeps?.length == 0" class="mt-3 mx-auto text-secondary">No keeps matching search</h1>
             <div class="masonry-with-columns">
-                <KeepCard v-for="k in filteredKeeps" :key="k.id" :keep="k" :isProfile="true" />
+                <KeepCard v-for="k in filteredKeeps" :key="k.id" :keep="k" />
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@
     <div v-else>
         <div class="d-flex flex-column mx-3 mx-md-5">
             <div class="d-flex mt-5 align-items-center">
-                <img :src="profile?.picture" class="profile-image rounded-2">
+                <img :src="profile?.picture" :alt="'Profile picture of ' + profile.name" class="profile-image rounded-2">
                 <div class="d-flex flex-column ms-3 ms-md-5 text-black">
                     <h1>{{profile?.name}}</h1>
                     <h3>Vaults: {{vaults?.length}}</h3>
