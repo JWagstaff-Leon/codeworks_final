@@ -14,23 +14,25 @@
 <script>
 import { ref } from '@vue/reactivity';
 import { keepsService } from '../services/KeepsService.js';
-import { useRouter } from 'vue-router';
 import Pop from '../utils/Pop.js';
 import { logger } from '../utils/Logger.js';
 import { Modal } from 'bootstrap';
+import { useRoute } from 'vue-router';
+import { AppState } from '../AppState.js';
 export default
 {
     setup()
     {
         const newData = ref({});
-        const router = useRouter();
+        const route = useRoute();
         return {
             newData,
             async submitForm()
             {
                 try
                 {
-                    const newKeep = await keepsService.create(newData.value);
+                    const shouldInsert = route.name == "Home" || route.name == "Profile" && route.params.id == AppState.account.id;
+                    const newKeep = await keepsService.create(newData.value, shouldInsert);
                     Modal.getOrCreateInstance(document.getElementById("new-item-modal")).hide();
                     keepsService.setActive(newKeep);
                     Pop.toast("Keep successfully created", "success");

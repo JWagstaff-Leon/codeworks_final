@@ -33,11 +33,14 @@ class KeepsService
         AppState.activeKeeps = res.data;
     }
 
-    async create(data)
+    async create(data, shouldInsert = true)
     {
         const res = await api.post("api/keeps", data);
         logger.log("[KeepsService > create > response]", res.data);
-        AppState.activeKeeps.push(res.data);
+        if(shouldInsert)
+        {
+            AppState.activeKeeps.push(res.data);
+        }
         return res.data;
     }
 
