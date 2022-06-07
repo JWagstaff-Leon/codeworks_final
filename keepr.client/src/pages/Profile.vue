@@ -25,17 +25,7 @@
                 <KeepCard v-for="k in filteredKeeps" :key="k.id" :keep="k" :isProfile="true" />
             </div>
         </div>
-        <KeepModal id="keep-modal" />
-        <NewItemModal id="new-item-modal">
-            <template #header>
-                <h1 v-if="newItemIsVault" class="text-black">New Vault</h1>
-                <h1 v-else class="text-black">New Keep</h1>
-            </template>
-            <template #body>
-                <NewVaultForm v-if="newItemIsVault" />
-                <NewKeepForm v-else />
-            </template>
-        </NewItemModal>        
+        <KeepModal id="keep-modal" />     
     </div>
 </template>
 
@@ -101,7 +91,6 @@ export default
         return {
             route,
             loading,
-            newItemIsVault,
             isCurrentUser: computed(() => AppState.account?.id === route.params.id),
             profile: computed(() => AppState.activeProfile),
             vaults: computed(() => AppState.activeVaults),
@@ -111,7 +100,7 @@ export default
             openModal: computed(() => AppState.openModal),
             newItemModal(isVault)
             {
-                newItemIsVault.value = isVault;
+                AppState.newItemIsVault = isVault;
                 Modal.getOrCreateInstance(document.getElementById("new-item-modal")).show();
             },
             resetPage,

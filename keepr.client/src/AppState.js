@@ -16,5 +16,6 @@ export const AppState = reactive({
 
   activeVault: null,
 
-  searchTerm: ""
+  searchTerm: "",
+  newItemIsVault: false
 })

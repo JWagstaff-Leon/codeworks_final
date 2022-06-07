@@ -27,7 +27,7 @@ export default
 {
     setup()
     {
-        const newData = ref({isPrivate: false});
+        const newData = ref({ isPrivate: false }); //has to start as something so it isn't undefined if the checkbox isnt toggled
         const router = useRouter();
         return {
             newData,
@@ -39,6 +39,7 @@ export default
                     Modal.getOrCreateInstance(document.getElementById("new-item-modal")).hide();
                     router.push({name: "Vault", params: { id: newVaultId }});
                     Pop.toast("Vault successfully created", "success");
+                    newData.value = { isPrivate: false };
                 }
                 catch(error)
                 {

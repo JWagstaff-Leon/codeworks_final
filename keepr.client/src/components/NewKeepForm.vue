@@ -18,7 +18,6 @@ import { useRouter } from 'vue-router';
 import Pop from '../utils/Pop.js';
 import { logger } from '../utils/Logger.js';
 import { Modal } from 'bootstrap';
-import { AppState } from '../AppState.js';
 export default
 {
     setup()
@@ -35,6 +34,7 @@ export default
                     Modal.getOrCreateInstance(document.getElementById("new-item-modal")).hide();
                     keepsService.setActive(newKeep);
                     Pop.toast("Keep successfully created", "success");
+                    newData.value = {};
                 }
                 catch(error)
                 {

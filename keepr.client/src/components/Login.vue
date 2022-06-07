@@ -29,8 +29,14 @@
         class="dropdown-menu p-0 list-group w-100"
         aria-labelledby="authDropdown"
       >
+        <div class="list-group-item list-group-item-action hoverable" @click="newItemModal(true)">
+            <i class="mdi mdi-plus text-primary"></i> New Vault
+        </div>
+        <div class="list-group-item list-group-item-action hoverable" @click="newItemModal(false)">
+            <i class="mdi mdi-plus text-primary"></i> New Keep
+        </div>
         <router-link :to="{ name: 'Profile', params: {id: account.id} }">
-          <div class="list-group-item list-group-item-action hoverable">
+          <div class="list-group-item list-group-item-action hoverable text-secondary">
             Go to my profile
           </div>
         </router-link>
@@ -51,6 +57,7 @@
 import { computed } from "@vue/reactivity";
 import { AppState } from "../AppState";
 import { AuthService } from "../services/AuthService";
+import { Modal } from 'bootstrap';
 export default {
   setup() {
     return {
@@ -62,6 +69,11 @@ export default {
       async logout() {
         AuthService.logout({ returnTo: window.location.origin });
       },
+        newItemModal(isVault)
+        {
+            AppState.newItemIsVault = isVault;
+            Modal.getOrCreateInstance(document.getElementById("new-item-modal")).show();
+        }
     };
   },
 };
@@ -80,5 +92,14 @@ export default {
 }
 .hoverable {
   cursor: pointer;
+}
+
+@media only screen and (max-width: 768px)
+{
+    .dropdown-menu
+    {
+        right: -0.5rem !important;
+        left: unset;
+    }
 }
 </style>
