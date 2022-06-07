@@ -6,7 +6,7 @@
         <div class="d-flex flex-column mx-3 mx-md-5 mt-5">
             <div class="d-flex justify-content-between">
                 <h1 class="text-black">{{vault?.name}}</h1>
-                <button v-if="isUsersVault" class="btn btn-outline-secondary my-auto" @click="deleteVault">Delete Vault</button>
+                <button v-if="isUsersVault" class="btn btn-outline-dark my-auto" @click="deleteVault">Delete Vault</button>
             </div>
             <h6 v-if="vault" class="text-black">Keeps: {{keeps?.length}}</h6>
             <h1 class="mt-5 text-black">Keeps <i v-if="isCurrentUser" class="mdi mdi-plus text-primary fs-2 action" title="Create new keep" @click="newItemModal(false)"></i></h1>

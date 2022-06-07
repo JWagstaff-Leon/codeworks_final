@@ -22,7 +22,7 @@
             height="40"
             class="rounded"
           />
-          <span class="mx-3 text-light fs-6 d-none d-md-inline">{{ account.name }}</span>
+          <span class="mx-3 text-white fs-6 d-none d-md-inline">{{ account.name }}</span>
         </div>
       </div>
       <div
