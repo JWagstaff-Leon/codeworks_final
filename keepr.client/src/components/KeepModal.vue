@@ -92,6 +92,9 @@ export default
             {
                 if(isValid)
                 {
+                    logger.log("--------------------");
+                    logger.log("vaultId:", vaultId);
+                    logger.log("keepId:", activeKeep.value?.id);
                     await vaultkeepsService.create(vaultId, activeKeep.value?.id);
                     Pop.toast("Successfully added to vault", "success");
                 }

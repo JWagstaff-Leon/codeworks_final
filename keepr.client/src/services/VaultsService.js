@@ -29,6 +29,7 @@ class VaultsService
     {
         const res = await api.post("api/vaults", data);
         logger.log("[VaultsService > create > response]", res.data);
+        AppState.userVaults.push(res.data);
         return res.data.id;
     }
 
@@ -36,6 +37,7 @@ class VaultsService
     {
         const res = await api.delete("api/vaults/" + id);
         logger.log("[VaultsService > remove > response]", res.data);
+        AppState.userVaults = AppState.userVaults.filter(vault => vault.id !== res.data.id);
     }
 }
 

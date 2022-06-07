@@ -66,7 +66,7 @@ namespace keepr.Repositories
             SELECT
                 *
             FROM vaultkeeps
-            WHERE id = @keepId AND creatorId = @userId;
+            WHERE keepId = @keepId AND creatorId = @userId;
             ";
             return _db.Query<VaultKeep>(sql, new { keepId, userId }).ToList();
         }
