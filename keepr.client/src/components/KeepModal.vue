@@ -26,6 +26,7 @@
                                 <div v-else class="dropdown my-2 my-lg-0">
                                     <button class="btn btn-outline-primary fw-bold dropdown-toggle" data-bs-toggle="dropdown">ADD TO VAULT</button>
                                     <ul class="dropdown-menu">
+                                        <li v-if="userVaults.length <= 0" class="no-select no-add text-secondary">No vaults</li>
                                         <li v-for="v in userVaults" :key="v.id" class="no-select" :class="{'selectable text-black': !activeVaultkeeps.find(vk => vk.vaultId == v.id), 'no-add text-secondary': activeVaultkeeps.find(vk => vk.vaultId == v.id)}" :title="activeVaultkeeps.find(vk => vk.vaultId == v.id) ? 'Keep is already in this vault' : ''" @click="addToVault(v.id, !activeVaultkeeps.find(vk => vk.vaultId == v.id))">{{v.name}}</li>
                                     </ul>
                                 </div>
