@@ -1,0 +1,1 @@
+var p=Object.defineProperty;var r=(e,s,t)=>s in e?p(e,s,{enumerable:!0,configurable:!0,writable:!0,value:t}):e[s]=t;var a=(e,s,t)=>(r(e,typeof s!="symbol"?s+"":s,t),t);class o{constructor(){a(this,"steps",[])}load(){const s=this.steps.map(t=>t.callback(...t.args));return this.steps=[],Promise.all(s)}step(s,t=[]){this.steps.push({callback:s,args:t})}}export{o as L};
