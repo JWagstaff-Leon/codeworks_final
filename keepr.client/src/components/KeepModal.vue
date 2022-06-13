@@ -30,7 +30,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <i v-if="isUsersKeep" class="mdi mdi-delete-outline text-secondary delete-keep-button action fs-1 order-3 order-xl-2" @click="deleteKeep"></i>
+                            <i v-if="isUsersKeep" class="mdi mdi-delete-outline text-secondary delete-keep-button action fs-1 order-3 order-xl-2" @click="deleteKeep" title="Delete this keep"></i>
                             <div class="d-flex align-items-end selectable p-1 order-1 order-xl-3 my-2 my-lg-0" @click="openProfile" :title="`Open ${activeKeep?.creator.name}'s profile`">
                                 <img :src="activeKeep?.creator.picture" class="profile-image rounded-2" />
                                 <h5 class="text-black ms-3 no-select">{{activeKeep?.creator.name}}</h5>
